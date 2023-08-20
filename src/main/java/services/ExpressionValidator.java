@@ -1,6 +1,7 @@
 package services;
 
 import com.fathzer.soft.javaluator.DoubleEvaluator;
+import utils.Utils;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -10,7 +11,7 @@ public class ExpressionValidator {
 
     private static final ExpressionValidator validator = new ExpressionValidator();
 
-    private DoubleEvaluator evaluator;
+    private final DoubleEvaluator evaluator;
 
     private ExpressionValidator() {
         evaluator = new DoubleEvaluator();
@@ -29,13 +30,23 @@ public class ExpressionValidator {
     }
 
     public boolean isCorrectSigns(String strNum) {
-        if (strNum == null) {
-            return false;
+        String[] split = strNum.split("");
+        for (int i = 0; i < split.length; i++) {
+            if (split[i].equalsIgnoreCase("+") ||
+                    split[i].equalsIgnoreCase("-") ||
+                    split[i].equalsIgnoreCase("*") ||
+                    split[i].equalsIgnoreCase("=") ||
+                    split[i].equalsIgnoreCase("/")) {
+                if (!pattern.matcher(split[i+1]).matches()){
+                    return false;
+                }
+            }
         }
-        return pattern.matcher(strNum).matches();
+        return true;
     }
 
-    private Pattern pattern = Pattern.compile("\\d+\\s*[+\\-*/]\\s*(-?\\d+|x)\\s*=\\s*\\d+");
+    private final Pattern pattern = Pattern.compile(Utils.pattern);
+
 
     private boolean isValidBracket(String text) {
         Deque<Character> stack = new ArrayDeque<>();

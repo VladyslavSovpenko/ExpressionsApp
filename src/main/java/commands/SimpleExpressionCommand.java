@@ -26,8 +26,9 @@ public class SimpleExpressionCommand extends AbstractCommand {
     @Override
     public void execute(String text) {
         if (validator.validate(text)) {
+            System.out.println("Expression: "+ text +" was saved in DB");
             connector.saveToDB(new Expression(text));
-            System.out.println("Expression was saved in DB");
+            System.out.println("Done!");
         } else {
             System.out.println("Expression was not saved in DB");
         }

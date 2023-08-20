@@ -5,6 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.util.List;
+
 public class DBConnector {
     private static final DBConnector db = new DBConnector();
 
@@ -29,6 +31,14 @@ public class DBConnector {
             session.save(expression);
             session.getTransaction().commit();
         }
-
+    }
+    public void getFromDB(){
+        try (SessionFactory factory = getSessionFactory()) {
+            Session session = factory.getCurrentSession();
+            session.beginTransaction();
+            List<Expression> expressions = session.createQuery("from ExpressionWithKey where key")
+                            .getResultList();
+            session.getTransaction().commit();
+        }
     }
 }

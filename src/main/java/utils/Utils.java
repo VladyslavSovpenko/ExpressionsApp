@@ -17,4 +17,6 @@ public interface Utils {
             SimpleExpressionWithKeyCommand.getInstance(),
             GetFromDBCommand.getInstance()
     };
+
+    String pattern = ".*[-\\dx].*";
 }
