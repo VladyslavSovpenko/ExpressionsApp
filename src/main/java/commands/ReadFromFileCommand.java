@@ -16,7 +16,7 @@ public class ReadFromFileCommand extends AbstractCommand{
     }
 
     @Override
-    public String execute(String text) {
-        return super.execute(text);
+    public void execute(String text) {
+
     }
 }

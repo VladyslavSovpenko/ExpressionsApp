@@ -6,7 +6,6 @@ public abstract class AbstractCommand {
         return "default";
     }
 
-    public String execute(String text){
-        return null;
+    public void execute(String text) {
     }
 }

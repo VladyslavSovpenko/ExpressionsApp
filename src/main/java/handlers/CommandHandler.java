@@ -15,15 +15,16 @@ public class CommandHandler {
         return commandHandler;
     }
 
-    public String handleCommand(String text) {
+    public void handleCommand(String text) {
         if (isCommand(text)) {
             text = text.replace("/", "");
             int spaceIndex = text.indexOf(" ");
             String commandStr = text.substring(0, spaceIndex);
             AbstractCommand command = getCommand(commandStr);
-            return command.execute(text);
+            text=text.substring(spaceIndex);
+            command.execute(text.trim());
         } else {
-            return "Unknown command, command list is: \n" + getListOfCommands();
+            System.out.println("Unknown command, command list is: \n" + getListOfCommands());
         }
     }
 
