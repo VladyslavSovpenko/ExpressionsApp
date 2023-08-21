@@ -17,11 +17,8 @@ public class CommandHandler {
 
     public void handleCommand(String text) {
         if (isCommand(text)) {
-            text = text.replace("/", "");
-            int spaceIndex = text.indexOf(" ");
-            String commandStr = text.substring(0, spaceIndex);
-            AbstractCommand command = getCommand(commandStr);
-            text=text.substring(spaceIndex);
+            AbstractCommand command = getCommand(getCommandName(text));
+            text = text.substring(text.indexOf(" "));
             command.execute(text.trim());
         } else {
             System.out.println("Unknown command, command list is: \n" + getListOfCommands());
@@ -29,17 +26,22 @@ public class CommandHandler {
     }
 
     private AbstractCommand getCommand(String command) {
-        for (int i = 0; i < Utils.commands.length; i++) {
-            if (command.equalsIgnoreCase(Utils.commands[i].getCommandName())) {
-                return Utils.commands[i];
+        for (int i = 0; i < Utils.ABSTRACT_COMMANDS.length; i++) {
+            if (command.equalsIgnoreCase(Utils.ABSTRACT_COMMANDS[i].getCommandName())) {
+                return Utils.ABSTRACT_COMMANDS[i];
             }
         }
         throw new CommandNotFoundException();
     }
 
+    private String getCommandName(String text) {
+        text = text.replace("/", "");
+        return text.substring(0, text.indexOf(" "));
+    }
+
     private String getListOfCommands() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (AbstractCommand command : Utils.commands) {
+        for (AbstractCommand command : Utils.ABSTRACT_COMMANDS) {
             stringBuilder.append(command.getCommandName()).append("\n");
         }
         return stringBuilder.toString();

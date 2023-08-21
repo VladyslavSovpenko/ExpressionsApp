@@ -5,9 +5,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DBConnector {
+
+    private List expressions = new ArrayList<>();
     private static final DBConnector db = new DBConnector();
 
     private DBConnector() {
@@ -18,10 +21,7 @@ public class DBConnector {
     }
 
     private SessionFactory getSessionFactory() {
-        return new Configuration()
-                .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Expression.class)
-                .buildSessionFactory();
+        return new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(Expression.class).buildSessionFactory();
     }
 
     public void saveToDB(Expression expression) {
@@ -32,13 +32,15 @@ public class DBConnector {
             session.getTransaction().commit();
         }
     }
-    public void getFromDB(){
+
+    public List getFromDB(String key) {
+        expressions.clear();
         try (SessionFactory factory = getSessionFactory()) {
             Session session = factory.getCurrentSession();
             session.beginTransaction();
-            List<Expression> expressions = session.createQuery("from ExpressionWithKey where key")
-                            .getResultList();
+            expressions = session.createQuery(String.format("from Expression where key IN (%s)", key)).getResultList();
             session.getTransaction().commit();
         }
+        return expressions;
     }
 }
